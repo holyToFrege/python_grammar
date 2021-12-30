@@ -1,0 +1,269 @@
+% Created 2021-10-12 Tue 17:53
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{kotex}
+\hypersetup{colorlinks=true}
+\setcounter{secnumdepth}{2}
+\author{Holy Frege}
+\date{\today}
+\title{python\_grammar}
+\hypersetup{
+ pdfauthor={Holy Frege},
+ pdftitle={python\_grammar},
+ pdfkeywords={org-mode, export, html, theme, style, css, js, bigblow},
+ pdfsubject={Org-HTML export made simple.},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Python Grammar}
+\label{sec:orgdd7df95}
+\begin{note}
+grammar는 외워야 한다.
+\end{note}
+\section{(1) Running Python}
+\label{sec:org36f0137}
+\subsection{python interpreter를 실행시킨다.}
+\label{sec:orga3302ee}
+\subsection{print "hello world"}
+\label{sec:orge6d9ba2}
+\section{(2) Variables and Arithematic Expressions}
+\label{sec:orgbf04a1e}
+\subsection{Data Type}
+\label{sec:org7c450a0}
+\begin{note}
+integer, float, string, boolean 을 BISF (B is F)를 data type이라고 하지만, python에선 data type을 기술하지 않는다.  Dynamic typed language이기 때문이다. variable와 변수를 사용해서 표현할 줄 만 알면 된다. 아래 program에서 variable들의 type은 value에 의해 결정되는 것을 알아야 한다. 그리고 나중에 나오겠지만, while문에서 :은 block의 시작을 의미한다. 따라서 : 다음의 명령어는 indentation이 필요하다.
+\end{note}
+\begin{itemize}
+\item 이자율 계산 program
+\end{itemize}
+\begin{verbatim}
+principal = 1000
+rate = 0.05
+numyears = 5
+year =1
+while year <= numyears:
+  principal = principal * (1 * rate)
+  print(year,principal)
+year +=1
+\end{verbatim}
+\section{(3) Data Structures}
+\label{sec:org4a61cd4}
+\subsection{Strings (array에 해당)}
+\label{sec:orgf1edc7b}
+\begin{itemize}
+\item create
+\end{itemize}
+string에는 문자열을 ' ' 이나 " " 안에 넣으면 된다. 그런데 만일 문자열에 ' ' 이나 " " 이 포함되어 있다면?
+''' triple quote를 사용하면 된다. 단순하게 생각하자. quote가 포함된 문자열과 quote가 포함되지 않은 문자열만 있다고.
+
+\begin{verbatim}
+a= "Hello World"
+b= " python is 'groovy'"
+d = ''' 'python' is "good" '''
+print(d)
+\end{verbatim}
+
+\begin{itemize}
+\item read
+read는 index를 사용해서 읽는다. index는 2가지가 있다. :을 사용하는 범위가 있는 index와 범위가 없는 index
+\begin{verbatim}
+a = "This is a python"
+print(a[2])
+print(a[2:5])
+print(a[:8])
+print(a[3:])
+\end{verbatim}
+
+\item update
+update라고 하긴 그렇지만, + operator(concatenate)를 사용해서 문자열을 합칠 수 있다.
+\begin{verbatim}
+a = "abc"
+b= "def"
+print (a + b)
+\end{verbatim}
+
+\item delete
+\end{itemize}
+delete라고 하긴 그렇지만, string이 아닌 다른 것으로 변환할 수 있다.
+\begin{verbatim}
+a = "30"
+b= "35"
+c = int(a) + int(b)
+print(c)
+\end{verbatim}
+
+\subsection{Lists [ ]}
+\label{sec:orge05e45a}
+\begin{itemize}
+\item create
+\begin{verbatim}
+names = ["Dave", "Mark", "Ann", "Phil"]
+print(names)
+\end{verbatim}
+
+\item read
+string(array)과 비슷하다. index를 사용한다. 범위가 있는 index, 범위가 없는 index처리가 array와 동일하다. 다만 범위가 있는 index의 경우 list를 return한다. 또한 unpack방식도 있다.
+\begin{verbatim}
+names = ["park", "kim", "lee"]
+name1,name2,name3 =names 
+print(name1)
+print(name2)
+print(name3)
+print(names[0])
+print(names[0:1])
+print(names[1:])
+print(names[:2])
+\end{verbatim}
+
+\item update
+update는 3가지 방식이 있다. append(), insert(), index로 대입. index로 직접 추가시 문제가 있음. 범위가 있는 경우는 list형태로,  범위가 없는 경우는 값만을 삽입해야 한다. concatenate도 가능하다.
+\end{itemize}
+\begin{verbatim}
+names = ["kim", "park", "lee"]
+names.append("hwang")
+print(names)
+names.insert(2,"you")
+print(names)
+names[0:1] = ["oh","lim"]
+print(names)
+names = ["holy","jaemyung"] + ["sukyoel", "junpyo"]
+print(names)
+\end{verbatim}
+
+\begin{itemize}
+\item delete
+특별히 delete에 관한 것은 없다.
+
+\item example
+\begin{verbatim}
+import sys
+if len(sys.argv) !=2:
+	     print("please supply a file name")
+	     raise SystemExit(1)
+f= open(sys.argv[1])
+lines = f.readlines()
+f.close()
+
+fvalues = [float(line) for line in lines]
+
+print( "The minimum value is ", min(fvalues))
+print("The maximum value is " , max(fvalues))
+\end{verbatim}
+\end{itemize}
+
+\subsection{Tuples ()}
+\label{sec:orgfd1c02a}
+\begin{itemize}
+\item create
+\begin{verbatim}
+stock = ('good' , 100, 490.10)
+temp = ('test',)
+print(stock)
+print(temp)
+\end{verbatim}
+
+\item read
+\end{itemize}
+tuple도 list의 indexing을 사용할 수 있다. 사용법도 동일하다. indexing이 범위가 있는 경우, 범위가 없는 경우에 따라서 값을 읽을수도 tuple을 읽을수도 있다. 또한 unpack방식도 사용할 수 있다.
+\begin{verbatim}
+names = ("holy", 12, 233.0)
+name, age, weight = names  ;;unpack
+
+print(names[1])
+print(names[1:2])
+print(name)
+print(age)
+print(weight)
+\end{verbatim}
+
+\begin{itemize}
+\item update
+\item delete
+\end{itemize}
+\subsection{Dictionaries \{\}}
+\label{sec:orga7c392d}
+\subsection{Sets\{\}}
+\label{sec:orga3611b1}
+\begin{itemize}
+\item create
+set은 만들어질때, 원소를 packing해서 만들기 보단, 기존에 있던 collection을 인자로 넣어서 만든다. 특이한 점은 결과가 정렬이 된다는 것이다. 아래 결과는 좀 다르다. 
+\begin{verbatim}
+r = set("hello")
+s = set([30,2,20,20])
+t = set((30,20,2,3))
+print(r)
+print(s)
+print(t)
+\end{verbatim}
+\end{itemize}
+
+\section{(4) File Input/Output}
+\label{sec:org5acf6e7}
+\section{(5) Conditionals}
+\label{sec:orgb1966f6}
+\begin{note}
+python은 switch 나 case같으 muptiple testing을 할 수 없다. 여기서 알아야 하는건, if else문과 if elif else문이다.
+\end{note}
+\begin{itemize}
+\item if else문
+\begin{verbatim}
+a = 30
+b = 4
+
+if a<b:
+	   pass
+else:
+	   print(" computer says no!")
+
+\end{verbatim}
+
+\item if elif else
+\begin{verbatim}
+suffix = ".htm"
+content = "abc"
+if suffix == ".htm":
+	content = "text/html"
+elif suffix == ".jpg":
+	content = "image/jpeg"
+elif suffix == ".png":
+	content = "image/png"
+else:
+	raise RuntimeError("Unknown content type")
+
+print(content)
+\end{verbatim}
+\end{itemize}
+
+\section{(6) iterations and looping}
+\label{sec:org8284795}
+\section{(7) Function}
+\label{sec:org85eaec8}
+\section{(8) Generation}
+\label{sec:org2fba10f}
+\section{(9) Coroutines}
+\label{sec:org95bb517}
+\section{(10) Object and Class}
+\label{sec:org34ea690}
+\section{(11) Modules}
+\label{sec:org5be1b37}
+\section{(12) Exceptions}
+\label{sec:orga4bd925}
+\end{document}

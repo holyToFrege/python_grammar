@@ -1,0 +1,517 @@
+#+TITLE: python_grammar
+#+AUTHOR: Holy Frege
+#+DESCRIPTION: Org-HTML export made simple.
+#+KEYWORDS:  org-mode, export, html, theme, style, css, js, bigblow
+#+LANGUAGE:  en
+#+OPTIONS:   H:4 toc:t num:2  ^:nil
+#+MACRO: color @@html:<font color=></font>@@
+#+PROPERTY:  header-args :padline no
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+LATEX_HEADER: \usepackage{kotex}
+#+latex_header: \hypersetup{colorlinks=true}
+
+* Python Grammar
+#+begin_note
+grammar는 외워야 한다.
+#+end_note
+* (1) Running Python
+** python interpreter를 실행시킨다.
+** print "hello world"
+* (2) Variables and Arithematic Expressions
+** Data Type
+#+begin_note
+integer, float, string, boolean 을 BISF (B is F)를 data type이라고 하지만, python에선 data type을 기술하지 않는다.  Dynamic typed language이기 때문이다. variable와 변수를 사용해서 표현할 줄 만 알면 된다. 아래 program에서 variable들의 type은 value에 의해 결정되는 것을 알아야 한다. 그리고 나중에 나오겠지만, while문에서 :은 block의 시작을 의미한다. 따라서 : 다음의 명령어는 indentation이 필요하다.
+#+end_note
+- 이자율 계산 program
+#+BEGIN_SRC python
+  principal = 1000
+  rate = 0.05
+  numyears = 5
+  year =1
+  while year <= numyears:
+    principal = principal * (1 * rate)
+    print(year,principal)
+  year +=1
+#+END_SRC
+
+#+RESULTS:
+** global (지역변수와 전역변수)
+#+begin_note
+python은 전역 변수 사용이 다른 언어와 좀 다르다.
+function 외부에 변수를 선언할 경우, 전역변수를 선언한 것은 맞다. 하지만, function 내부에서 전역변수의 값을 설정할때, 명시적으로 global keyword를 설정해야 한다.
+#+end_note
+#+BEGIN_SRC python :results output
+  temp =5
+
+  def tempchange():
+        temp = 20
+  tempchange()
+  print(temp)
+#+END_SRC
+
+#+RESULTS:
+: 5
+
+#+begin_note
+위 코드를 보면 temp라는 global 변수의 값을 tempchange에서 20으로 수정했으나, 실제 반영 되지 않았다. 반영되지 않은 이유는 tempchange라는 함수에선 temp를 local변수로 보기 때문이다. 이것을 수정하기 위해선, global 변수라고 function안에서 다시 한번 선언해야 한다. 아래를 보자. global로 선언하기 때문에 제대로 동작이 되는 것을 볼 수 있다.
+#+end_note
+#+BEGIN_SRC python :results output
+  temp =5
+
+  def tempchange():
+      global temp
+      temp = 20
+  tempchange()
+  print(temp)
+#+END_SRC
+
+#+RESULTS:
+: 20
+
+
+* (3) Data Structures
+** Strings (array에 해당)
+- create
+string에는 문자열을 ' ' 이나 " " 안에 넣으면 된다. 그런데 만일 문자열에 ' ' 이나 " " 이 포함되어 있다면?
+''' triple quote를 사용하면 된다. 단순하게 생각하자. quote가 포함된 문자열과 quote가 포함되지 않은 문자열만 있다고.
+     
+  #+begin_src python :results output
+    a= "Hello World"
+    b= " python is 'groovy'"
+    d = ''' 'python' is "good" '''
+    print(d)
+  #+end_src
+
+  #+RESULTS:
+  :  'python' is "good" 
+
+- read
+  read는 index를 사용해서 읽는다. index는 2가지가 있다. :을 사용하는 범위가 있는 index와 범위가 없는 index
+  #+BEGIN_SRC python :results output
+    a = "This is a python"
+    print(a[2])
+    print(a[2:5])
+    print(a[:8])
+    print(a[3:])
+  #+END_SRC
+
+  #+RESULTS:
+  : i
+  : is 
+  : This is 
+  : s is a python
+
+- update
+  update라고 하긴 그렇지만, + operator(concatenate)를 사용해서 문자열을 합칠 수 있다.
+  #+BEGIN_SRC python :results output
+        a = "abc"
+        b= "def"
+        print (a + b)
+  #+END_SRC
+
+  #+RESULTS:
+  : abcdef
+
+- delete
+delete라고 하긴 그렇지만, string이 아닌 다른 것으로 변환할 수 있다.
+#+BEGIN_SRC python :results output
+    a = "30"
+    b= "35"
+    c = int(a) + int(b)
+    print(c)
+#+END_SRC
+
+#+RESULTS:
+: 65
+
+** Lists [ ]
+- create
+  #+BEGIN_SRC python :results output
+    names = ["Dave", "Mark", "Ann", "Phil"]
+    print(names)
+  #+END_SRC
+
+  #+RESULTS:
+  : ['Dave', 'Mark', 'Ann', 'Phil']
+
+- read
+  string(array)과 비슷하다. index를 사용한다. 범위가 있는 index, 범위가 없는 index처리가 array와 동일하다. 다만 범위가 있는 index의 경우 list를 return한다. 또한 unpack방식도 있다.
+  #+BEGIN_SRC python :results output
+    names = ["park", "kim", "lee"]
+    name1,name2,name3 =names 
+    print(name1)
+    print(name2)
+    print(name3)
+    print(names[0])
+    print(names[0:1])
+    print(names[1:])
+    print(names[:2])
+  #+END_SRC
+
+  #+RESULTS:
+  : park
+  : kim
+  : lee
+  : park
+  : ['park']
+  : ['kim', 'lee']
+  : ['park', 'kim']
+
+- update
+  update는 3가지 방식이 있다. append(), insert(), index로 대입. index로 직접 추가시 문제가 있음. 범위가 있는 경우는 list형태로,  범위가 없는 경우는 값만을 삽입해야 한다. concatenate도 가능하다.
+#+BEGIN_SRC python :results output
+  names = ["kim", "park", "lee"]
+  names.append("hwang")
+  print(names)
+  names.insert(2,"you")
+  print(names)
+  names[0:1] = ["oh","lim"]
+  print(names)
+  names = ["holy","jaemyung"] + ["sukyoel", "junpyo"]
+  print(names)
+#+END_SRC
+
+#+RESULTS:
+: ['kim', 'park', 'lee', 'hwang']
+: ['kim', 'park', 'you', 'lee', 'hwang']
+: ['oh', 'lim', 'park', 'you', 'lee', 'hwang']
+: ['holy', 'jaemyung', 'sukyoel', 'junpyo']
+
+- delete
+  특별히 delete에 관한 것은 없다.
+
+- example
+  #+BEGIN_SRC python :results output
+    import sys
+    if len(sys.argv) !=2:
+                 print("please supply a file name")
+                 raise SystemExit(1)
+    f= open(sys.argv[1])
+    lines = f.readlines()
+    f.close()
+
+    fvalues = [float(line) for line in lines]
+
+    print( "The minimum value is ", min(fvalues))
+    print("The maximum value is " , max(fvalues))
+  #+END_SRC
+
+  #+RESULTS:
+
+- insert()
+  #+begin_note
+    python list에 insert함수가 필요한 이유. list를 사용할 때 보통은 선언을 하고 사용한다. 선언할 때 빈 list를 선언하고,  값을 마음껏 집어넣고 싶을 것이다. 예를 들면 아래와 같이 index를 사용해서 값을 할당하고 싶을 것이다. 그런데 불가능하다. list에서 값을 집어 넣는것은 insert와 append를 사용할 수 밖에 없다. append는 index를 사용하지 않는다. index를 사용해서 집어넣는 방식은 insert가 유일하다. 빈 list를 생성하고, 빈 list에 값을 집어넣는 것은 indexing이 아닌, insert와 append를 사용해야 함에 유의하자. 
+    #+end_note
+  #+BEGIN_SRC python :results output
+    arr = []
+    for _ in range(1:10):
+         arr[0] =str(input())
+  #+END_SRC
+- list의 삭제
+  #+begin_note
+  list에서 원소를 삭제하는 방식은 여러개가 있다.
+  1) del a[1] -- indexing으로 콕 집어서 삭제.
+  2) a.remove(1) -- 값을 확인하고 삭제
+
+  #+end_note
+** Tuples ()
+- create
+  #+BEGIN_SRC python :results output
+        stock = ('good' , 100, 490.10)
+        temp = ('test',)
+        print(stock)
+        print(temp)
+  #+END_SRC
+
+  #+RESULTS:
+  : ('good', 100, 490.1)
+  : ('test',)
+
+- read
+tuple도 list의 indexing을 사용할 수 있다. 사용법도 동일하다. indexing이 범위가 있는 경우, 범위가 없는 경우에 따라서 값을 읽을수도 tuple을 읽을수도 있다. 또한 unpack방식도 사용할 수 있다.
+  #+BEGIN_SRC python :results output
+    names = ("holy", 12, 233.0)
+    name, age, weight = names  ;;unpack
+
+    print(names[1])
+    print(names[1:2])
+    print(name)
+    print(age)
+    print(weight)
+  #+END_SRC
+
+  #+RESULTS:
+  : 12
+  : [12]
+  : holy
+  : 12
+  : 233.0
+
+- update
+- delete
+** Dictionaries {}
+** Sets{}
+- create
+  set은 만들어질때, 원소를 packing해서 만들기 보단, 기존에 있던 collection을 인자로 넣어서 만든다. 특이한 점은 결과가 정렬이 된다는 것이다. 아래 결과는 좀 다르다. 
+  #+BEGIN_SRC python :results output
+    r = set("hello")
+    s = set([30,2,20,20])
+    t = set((30,20,2,3))
+    print(r)
+    print(s)
+    print(t)
+  #+END_SRC
+
+  #+RESULTS:
+  : set(['h', 'e', 'l', 'o'])
+  : set([2, 20, 30])
+  : set([2, 3, 20, 30])
+
+* (4) File Input/Output
+* (5) Conditionals
+#+begin_note
+python은 switch 나 case같으 muptiple testing을 할 수 없다. 여기서 알아야 하는건, if else문과 if elif else문이다.
+#+end_note
+- if else문
+  #+BEGIN_SRC python
+    a = 30
+    b = 4
+
+    if a<b:
+               pass
+    else:
+               print(" computer says no!")
+
+  #+END_SRC
+
+  #+RESULTS:
+  : None
+
+- if elif else
+  #+BEGIN_SRC python :results output
+    suffix = ".htm"
+    content = "abc"
+    if suffix == ".htm":
+            content = "text/html"
+    elif suffix == ".jpg":
+            content = "image/jpeg"
+    elif suffix == ".png":
+            content = "image/png"
+    else:
+            raise RuntimeError("Unknown content type")
+
+    print(content)
+  #+END_SRC
+
+  #+RESULTS:
+  : text/html
+
+* (6) iterations and looping
+- for loop: for loop는 2가지 형태로 사용한다. (1) for loop in collection, (2) for loop in range
+- range는 범위나 값을 인자로 받는 함수다.  ex) range(5): 0~4 , range(1,3):1,2
+- example
+  #+BEGIN_SRC python :results output
+    for n in [1,2,3,4,5,6,7,8,9]:
+        print(n)
+
+    for k in range(3):
+        print(k)
+
+    for k in range(1,5):
+        print(k)
+  #+END_SRC
+
+  #+RESULTS:
+  #+begin_example
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+  0
+  1
+  2
+  1
+  2
+  3
+  4
+  #+end_example
+  
+* (7) Function
+- function은 다른 언어와 크게 차이가 없다. 3가지 정도 특징이 있는데, 1) syntax: def로 시작하고, 함수 이름, argument후에 :으로 block을 대신한다는 점. 2) return이라는 keyword가 있다. 3) 함수를 사용시에 unpacking이 가능하다는 점 정도다. example에서 3가지에 대해서 예를 들겠다.
+- example
+  #+BEGIN_SRC python :results output
+    def reminder(a, b):
+                        q = a//b
+                        r = a - q*b
+                        return r
+    print(reminder(10,3))
+
+    def divide(a,b):
+                        q = a/b
+                        r = a - (q*b)
+                        return (q,r)
+
+    q,r = divide(10,3)
+    print(str(q) + "residue"+str(r))
+  #+END_SRC
+
+  #+RESULTS:
+  : 1
+  : 3residue1
+
+* (8) Generator vs coroutine
+- Generator와 coroutine은 모두 function이다. 그런데 일반 function과 다르다. 일반 function은 호출되면 실행되고 끝난다. 그런데 generator와 coroutine은 다르다. 이 두 종류의 함수는 호출되었다고 해서 실행되지 않는다. 실행이 멈출수 있다는 점에서 function과 다르다. 이것을 가능하게 해주는 것이 yield라는 keyword다. function에 yield가 있다면 generator아니면, coroutine이겠구나 하고 생각하면 편하다. 그러면 yield가 포함된 function, generator와 coroutine은 어떻게 구분하는가? 둘다 yield라는 keyword를 사용하지만, 사용법이 다르다. 사용법이 다를 수 있는 이유는 yield라는 keyword가 다르게 사용될수 있게 설계되었기 때문이다. 예를 들어, code로 볼때, "yield 변수"라고 쓰여 있다면, generator다. "yield"만 있다면 coroutine이다. 이렇게 말할 수 있다. 복잡한 이론 설명없이 모양만 보고서 알수 있다. 그럼 차이는 무엇인가? coroutine에서의 yield만 쓰일경우 외부로 부터 입력을 받아들이는 변수처럼 쓰인다. 이와는 달리, generator에서 "yield 변수명"으로 쓰이는 경우에는 return문처럼 쓰인다. 즉 변수명을 return한다. generator는 늘 return하기 때문에 generator라는 이름이 붙은 것이다. generator를 생각할때, 아래처럼 생각하면 좋다. 예를들어 1-1000까지 숫자data를 처리해야 한다고 하자. 이런 data는 python programming안에서 어디선가 저장을 해야 한다. list를 사용하던, tuple,dictionary, set과 같은 collection에 저장하고 처리해야 한다. 혹은 range를 사용해도 된다. 그런데 collection과 range는 메모리안에 숫자 data의 크기 만큼의 공간을 차지 한다. generator는 그렇지 않다. generator는 메모리의 공간을 차지 하지 않고도 숫자를 제공한다. collection과 똑같은 방식으로 처리되기 때문에 사용하는데도 문제가 없다. collection에서는 하나의 숫자를 처리하고 다음 숫자를 가져올 때, index를 증가 시켜서 처리한다. generator에서는 __next__()라는 built-in function을 사용하거나 next()를 사용해서 다음숫자를 가져올 수 있다.
+
+- yield의 기본동작
+  yield는 기본적으로 generator, coroutine에서 사용되며,  외부에서 next()를 호출하면 yield에서 멈추며 수행을 대기한다. 이때 외부에서 send()를 호출해서 값을 yield에 전달할수도 있고, 다시 next()로 수행시킬수 있다. yield 다음에 argument가 있는 경우에는 외부에서 next()를 호출할 경우, argument가 return된다. 반면에 yield다음에 아무것도 없는 경우, 외부에서 send()를 사용할 경우, 값을 받아들이는 역할을 한다. generator에선 yield argument의 형태를 사용하고, coroutine은 yield만 사용하는 형태를 갖는다.
+
+- send and next
+send와 next는 generator와 coroutine을 동작시키는 함수로 보면 된다. generator와 coroutine을 생성한 후에 next()를 수행해줘야, yield에서 대기하며, 이때 send를 호출해서 값을 전달할 수도 있고, next()로 다시 수행할 수도 있다. generator나 coroutine을 생성한 후에 send(값)을 한다고 해서 값이 전달되지는 않는다는 것에 유의해야 한다. next를 호출한 이후에 send를 사용할 수 있다.
+  
+- example
+  #+BEGIN_SRC python :results output
+    def countdown(n):
+                    print("count down!")
+                    while (n>0):
+                                    yield n
+                                    n -= 1
+
+    c= countdown(4)
+    next(c)
+    c.__next__()
+  #+END_SRC
+
+  #+RESULTS:
+* (10) Object and Class
+#+begin_note
+python에서 모든 것은 객체다. 객체에 정의된 methods를 확인하려면, dir()으로 알 수 있다.  class를 만들수도 있는데, class keyword를 사용해서 만들 수 있다. 아래 list를 사용한 stack을 만들었는데, list에는 push와 pop이라는 함수가 있어서 class를 별도로 만들지 않아도 되긴 하다. 그런데 stack이라는 class의 내부를 list로 만들고 이를 stack으로 표현한 방식이다. class의 선언이 좀 특이하다. class 클래스명 다음에 ()가 있어서 마치 함수의 parameter처럼 만들었다. 이것은 상속하고자 하는 class를 나타낸다. 즉 Stack은 object를 상속한다는 뜻이다. class에 필요한 멤버변수와 멤버함수는 self를 사용해서 접근한다. 따라서 모든 member함수의 인자에는 self라는 변수가 인자로 들어간다. 생성자에는 __init__(self)라는 함수가 있다. 생성자에서 클래스에 필요한 멤버 변수를 만들어서 사용한다. 다른 methods에선 self를 통해서 멤버변수를 접근할 수 있다. 멤버함수에선 self라는 변수가 첫번째 인자로 들어가고, 두번째 인자에서 필요한 매개변수를 class type으로 받는다. object면 모든 객체가 인자값으로 들어올 수 있다는 것이다.
+#+end_note
+- class 만들기 (상속받지 않는 class와 상속받는 class)
+#+BEGIN_SRC python :results output
+  class TestClass:
+    pass
+
+  testclass = TestClass()
+  print(type(testclass))
+
+  class TestClass2(object):
+    title= "testclass2"
+
+  t = TestClass2()
+  print(t.title)
+#+END_SRC
+
+#+RESULTS:
+: <type 'instance'>
+: testclass2
+
+- class 변수 만들기
+  #+BEGIN_SRC python :results output
+    class Temp:
+        name = "holy"
+
+    a = Temp()
+    b = Temp()
+
+    print(a.name)
+    print(b.name)
+  #+END_SRC
+
+  #+RESULTS:
+  : holy
+  : holy
+
+- method만들기
+  #+BEGIN_SRC python :results output
+    class Temp:
+        name = "holy in temp"
+        def getName(self):
+            return self.name
+    t = Temp()
+    print(t.getName())
+  #+END_SRC
+
+  #+RESULTS:
+  : holy in temp
+
+- 생성자(클래스를 생성할때, 함수나 변수를 설정하고자 할 때 사용)
+  #+BEGIN_SRC python :results output
+    class Temp2:
+        def __init__(self):
+            print("construct Temp2")
+
+    t = Temp2()
+  #+END_SRC
+
+  #+RESULTS:
+  : construct Temp2
+
+- instance 변수 (객체를 생성하고, 객체에 따른 instance변수를 만들어 사용할 수 있다. 이게 java와 다른 큰 특징) class 변수는 모든 instances들이 공통적으로 가지고 있지만, instance 변수는 그렇지 않다.
+#+BEGIN_SRC python :results output
+  class Temp3:
+      pass
+
+  t1 = Temp3()
+  t1.name = "holy"
+  t2 = Temp3()
+  t2.name ="holy2"
+  print(t1.name)
+  print(t2.name)
+#+END_SRC
+
+#+RESULTS:
+: holy
+: holy2
+
+- 또 다른 instance변수의 예
+  class를 생성할 때, 인자로 특정값을 넣어줄 수 있다. 이렇게 하려면 생성자에서 처리를 해야 하는데, 다음 예를 보자. 생성자에서 object로 인자를 받고 인자를 출력한다. 이때 self를 사용함으로써, 마치 class변수처럼 instance에 값을 유지한다. 하지만, instance별로 다른 값을 유지하기 때문에  instance변수와 비슷하게 된다.
+
+  #+BEGIN_SRC python :results output
+    class Test1:
+        def __init__(self, object):
+            self.a = object
+        def getThis(self):
+            print(self.a)
+
+
+    t = Test1("holy")
+    t2 = Test1("holy2")
+    t.getThis()
+    t2.getThis()
+  #+END_SRC
+
+  #+RESULTS:
+  : holy
+  : holy2
+
+* (11) Modules
+
+* (12) Exceptions
+
+* (13) List Comprehension
+
+* (14) Input/Output
+- input
+#+begin_note
+한줄을 읽는다.
+개행문자를 제외한다.
+string으로 변환한다.
+EOF를 읽으면, EOFError를 raise한다. => 적절한 try except를 해줘야 한다. (try except EOFError)
+#+end_note
+#+BEGIN_SRC python
+  try:
+     command = input.split()
+  except EOFError:
+     break
+#+END_SRC
+- readline()
+#+begin_note
+sys.stdin.readline()가 EOF를 읽으면 빈 문자열을 반환한다.  
+#+end_note
+
+* eval 사용법
